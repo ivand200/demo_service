@@ -24,6 +24,11 @@ POST /price   {"product": "product_045", "sale_rate": 25}
 Each `POST /price` request is logged to `logs/app.jsonl`, one JSON object per
 line. `/health` is not logged.
 
+## Discount policy
+
+A sale discount is capped at 50%. A request above the cap is not allowed.
+The cap is defined as `MAX_SALE_RATE` in `app.py`.
+
 ## Tests
 
 ```bash

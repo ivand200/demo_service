@@ -19,6 +19,9 @@ from pydantic import BaseModel
 DB_PATH = Path(os.environ.get("DEMO_DB", "pricing.sqlite"))
 LOG_PATH = Path(os.environ.get("DEMO_LOG", "logs/app.jsonl"))
 
+# Largest allowed sale discount, in percent. See the discount policy in README.md.
+MAX_SALE_RATE = 50
+
 app = FastAPI(title="pricing", version="1.0.0")
 
 
