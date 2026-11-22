@@ -14,7 +14,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 DB_PATH = Path(os.environ.get("DEMO_DB", "pricing.sqlite"))
 LOG_PATH = Path(os.environ.get("DEMO_LOG", "logs/app.jsonl"))
@@ -27,7 +27,7 @@ app = FastAPI(title="pricing", version="1.0.0")
 
 class PriceRequest(BaseModel):
     product: str
-    sale_rate: float
+    sale_rate: float = Field(le=MAX_SALE_RATE)
 
 
 def release() -> str:
