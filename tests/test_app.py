@@ -51,6 +51,27 @@ def test_zero_sale_rate_keeps_the_base_price() -> None:
     assert response.json()["final_price"] == 10.0
 
 
+def test_sale_rate_above_policy_cap_is_rejected_without_logging() -> None:
+    log_path = Path(os.environ["DEMO_LOG"])
+    before = len(log_path.read_text(encoding="utf-8").splitlines())
+
+    response = client.post(
+        "/price", json={"product": "product_045", "sale_rate": 80}
+    )
+
+    assert response.status_code == 422
+    assert len(log_path.read_text(encoding="utf-8").splitlines()) == before
+
+
+def test_sale_rate_at_policy_cap_is_allowed() -> None:
+    response = client.post(
+        "/price", json={"product": "product_045", "sale_rate": 50}
+    )
+
+    assert response.status_code == 200
+    assert response.json()["final_price"] == 27.5
+
+
 def test_unknown_product_is_refused() -> None:
     # GIVEN a product that does not exist
     # WHEN /price is called
